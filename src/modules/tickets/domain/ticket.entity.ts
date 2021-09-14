@@ -1,13 +1,17 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, FindRelationsNotFoundError, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Ticket {
   @PrimaryGeneratedColumn()
   id: string;
   @Column()
-  ticketName: string;
-  @Column()
-  code: string;
+  name: string;
   @Column()
   isExpired: boolean;
+  @Column()
+  published: Date;
+  @Column()
+  contract_id: string;
+  @Column()
+  validTo: Date;
 }

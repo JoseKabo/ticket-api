@@ -6,17 +6,19 @@ import { TicketsModule } from './modules/tickets/tickets.module';
 import { UsersModule } from './modules/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
+import { ConfigModule } from '@nestjs/config';
+import { configService } from './database/database';
 
 @Module({
-  imports: [TypeOrmModule.forRoot({
-    type: 'mysql',
-    host: 'sql397.main-hosting.eu',
-    port: 3306,
-    username: 'u960673546_tickestest',
-    password: 'u960673546_tickets',
-    database: 'u960673546_tickets',
-    synchronize: true,
-  }), TicketsModule, UsersModule, SharedModule],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: ['dev.env'],
+    }),
+    TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
+    TicketsModule,
+    UsersModule,
+    SharedModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
