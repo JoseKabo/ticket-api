@@ -9,11 +9,10 @@ export class TicketsController {
   @Get()
   sayHello(): string {
     let ticketNames: Ticket[];
-    this.ticketService.getAll().then(
-      (value: Ticket[]) => {
-        ticketNames = value;
-      }
-    );
-    return ticketNames.join('-');
+    this.ticketService.getAll().then((value) => {
+      console.log(value);
+      ticketNames = value;
+    });
+    return ticketNames[0].name;
   }
 }

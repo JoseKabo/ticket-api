@@ -1,13 +1,7 @@
+// ! not works now
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
-
 class ConfigService {
-  constructor() {
-    ConfigModule.forRoot({
-      envFilePath: ['dev.env'],
-    });
-    console.log('env :>> ', process.env);
-  }
+  constructor() {}
 
   private getValue(key: string, throwOnMissing = true): string {
     const value = process.env[key];
@@ -53,6 +47,7 @@ class ConfigService {
       },
 
       ssl: this.isProduction(),
+      autoLoadEntities: true,
     };
   }
 }
