@@ -5,7 +5,7 @@ import { Connection, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
 
-import { User } from '../../entities/user';
+import { User } from 'src/modules/shared/entities/user';
 import { SignUpDto } from '../../requests/sign-up.request';
 
 @Injectable()
@@ -16,16 +16,18 @@ export class SignUpService {
     private connection: Connection,
   ) {}
 
-  async createOne(newUser: SignUpDto): Promise<User> {
-    const createUser = await this.createUser(newUser);
+  async createOne(newUser: SignUpDto): Promise<any> {
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const user = await queryRunner.manager.save(createUser);
-      return user;
+      const createUser = await this.createUser(newUser);
+      const { password, ...resto } = await queryRunner.manager.save(createUser);
+      return resto;
     } catch (error) {
-      console.log('error :>> ', error);
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
     }
   }
 

@@ -9,6 +9,6 @@ export class SignUpController {
   @Post()
   async signUp(@Body() newUser: SignUpDto) {
     const createdUser = await this.signUpService.createOne(newUser);
-    console.log('createdUser :>> ', createdUser);
+    return createdUser;
   }
 }
