@@ -21,8 +21,10 @@ export class SignUpService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const createUser = await this.createUser(newUser);
+      const createUser = await this.buildUserModel(newUser);
+      debugger;
       const { password, ...resto } = await queryRunner.manager.save(createUser);
+      await queryRunner.commitTransaction();
       return resto;
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -31,7 +33,7 @@ export class SignUpService {
     }
   }
 
-  async createUser(newUser: SignUpDto): Promise<User> {
+  async buildUserModel(newUser: SignUpDto): Promise<User> {
     const hashPassword = await bcrypt.hash(newUser.password, 10);
     const id: string = uuid();
     const createUser = new User();
